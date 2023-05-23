@@ -12,7 +12,7 @@ export class Repository {
     }
 
     static async deleteRide(id: number): Promise<number> {
-        return await DbUtils.deleteRide(id);
+        return await DbUtils.deleteRideById(id);
     }
 
     static async getCats(): Promise<Cat[]> {
@@ -31,12 +31,28 @@ export class Repository {
         return await DbUtils.getUserById(id);
     }
 
+    static async login(username:string, password:string): Promise<User> {
+        return await DbUtils.login(username, password);
+    }
+
+    static async getUsers(): Promise<User[]> {
+        return await DbUtils.getUsers();
+    }
+
     static async getPendingUserApplications(): Promise<User[]> {
         return await DbUtils.getPendingUserApplications();
     }
 
+    static async getPendingFosterCareApplications(): Promise<FosterCare[]> {
+        return await DbUtils.getPendingFosterCareApplications();
+    }
+
     static async upsertUser(user: Partial<User>): Promise<User> {
         return await DbUtils.upsertUser(user);
+    }
+
+    static async createUser(user: User): Promise<User> {
+        return await DbUtils.createUser(user);
     }
 
     static async deleteUser(id: number): Promise<number> {
@@ -47,7 +63,15 @@ export class Repository {
         return await DbUtils.upsertFosterCare(fosterCare);
     }
 
-    static async deleteFosterCare(id: number): Promise<number> {
+    static async deleteFosterCareById(id: number): Promise<number> {
         return await DbUtils.deleteFosterCare(id);
+    }
+
+    static async deleteFosterCareByCatId(catId: number): Promise<number> {
+        return await DbUtils.deleteFosterCareByCatId(catId);
+    }
+
+    static async deleteRideByCatId(catId: number): Promise<number> {
+        return await DbUtils.deleteRideByCatId(catId);
     }
 }

@@ -14,7 +14,7 @@ export class Controller {
         Controller.app.use((req: Request, res: Response, next: NextFunction) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE');
-            res.setHeader('Access-Control-Allow-Methods', 'Content-Type');
+            res.setHeader('Access-Control-Allow-Headers', 'Accept,Accept-Language,Content-Language,Content-Type');
             next();
         });
         Controller.app.get('/getCats', Controller.getCats);
@@ -24,10 +24,14 @@ export class Controller {
         Controller.app.post('/upsertRide', Controller.upsertRide);
         Controller.app.post('/claimRide/:id/:userId', Controller.claimRide);
         Controller.app.delete('/deleteRide/:id', Controller.deleteRide);
+        Controller.app.get('/getUsers', Controller.getUsers);
         Controller.app.get('/pendingUserApplications', Controller.getPendingUserApplications);
+        Controller.app.post('/createUser', Controller.createUser);
         Controller.app.post('/upsertUser', Controller.upsertUser);
+        Controller.app.get('/login/:username/:password', Controller.login);
         Controller.app.post('/approveUser/:id', Controller.approveUser);
         Controller.app.delete('/deleteUser/:id', Controller.deleteUser);
+        Controller.app.get('/pendingFosterCareApplications', Controller.getPendingFosterCareApplications);
         Controller.app.post('/upsertFosterCare', Controller.upsertFosterCare);
         Controller.app.post('/approveFosterCare/:id', Controller.approveFosterCare);
         Controller.app.delete('/deleteFosterCare/:id', Controller.deleteFosterCare);
@@ -56,7 +60,7 @@ export class Controller {
 
     private static async adoptCat(req: Request, res: Response): Promise<Response> {
         try {
-            const catId: number = +req.params.id;
+            const catId: number =  req?.params?.id ? +req.params.id : -1;;
             console.log(`Got request to adopt cat with id: ${catId}`);
             return res.send(catId && await Service.adoptCat(catId));
         } catch (e) {
@@ -88,8 +92,8 @@ export class Controller {
 
     private static async claimRide(req: Request, res: Response): Promise<Response> {
         try {
-            const id: number = +req.params.id;
-            const userId: number = +req.params.userId;
+            const id: number = req?.params?.id ? +req?.params?.id : -1;
+            const userId: number =  req?.params?.userId ? +req.params.userId : -1;;
             console.log(`Got request to claim ride by user with id: ${JSON.stringify(id)}`);
             return res.send(await Service.claimRide(id, userId));
         } catch (e) {
@@ -105,6 +109,16 @@ export class Controller {
             return res.json({success: await Service.deleteRide(id)});
         } catch (e) {
             console.error(`Request to delete ride failed. Error: ${e}`);
+            return res.send(e);
+        }
+    }
+
+    private static async getUsers(req: Request, res: Response): Promise<Response> {
+        try {
+            console.log(`Got request to get all users`);
+            return res.send(await Service.getUsers());
+        } catch (e) {
+            console.error(`Request to get users failed. Error: ${e}`);
             return res.send(e);
         }
     }
@@ -130,13 +144,36 @@ export class Controller {
         }
     }
 
+    private static async createUser(req: Request, res: Response): Promise<Response> {
+        try {
+            const user: User = req.query as unknown as User;
+            console.log(`Got request to create user: ${JSON.stringify(user)}`);
+            return res.send(await Service.createUser(user));
+        } catch (e) {
+            console.error(`Request to create user failed. Error: ${e}`);
+            return res.send(e);
+        }
+    }
+
     private static async approveUser(req: Request, res: Response): Promise<Response> {
         try {
-            const id: number = +req.params.id;
+            const id: number = req?.params?.id ? +req.params.id : -1;
             console.log(`Got request to approve user with id: ${JSON.stringify(id)}`);
             return res.send(await Service.approveUser(id));
         } catch (e) {
             console.error(`Request to approve user failed. Error: ${e}`);
+            return res.send(e);
+        }
+    }
+
+    private static async login(req: Request, res: Response): Promise<Response> {
+        try {
+            const username: string = req.params.username;
+            const password: string = req.params.password;
+            console.log(`Got request to login: ${JSON.stringify({username, password})}`);
+            return res.send(await Service.login(username, password));
+        } catch (e) {
+            console.error(`Request to login user failed. Error: ${e}`);
             return res.send(e);
         }
     }
@@ -148,6 +185,16 @@ export class Controller {
             return res.json({success: await Service.deleteUser(id)});
         } catch (e) {
             console.error(`Request to delete user failed. Error: ${e}`);
+            return res.send(e);
+        }
+    }
+
+    private static async getPendingFosterCareApplications(req: Request, res: Response): Promise<Response> {
+        try {
+            console.log(`Got request to get pending foster care applications`);
+            return res.send(await Service.getPendingFosterCareApplications());
+        } catch (e) {
+            console.error(`Request to get pending foster care applications failed. Error: ${e}`);
             return res.send(e);
         }
     }
@@ -170,7 +217,7 @@ export class Controller {
 
     private static async approveFosterCare(req: Request, res: Response): Promise<Response> {
         try {
-            const id: number = +req.params.id;
+            const id: number =  req?.params?.id ? +req.params.id : -1;;
             console.log(`Got request to approve foster care with id: ${JSON.stringify(id)}`);
             return res.send(await Service.approveFosterCare(id));
         } catch (e) {

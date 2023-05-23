@@ -49,16 +49,42 @@ export class DbUtils {
         return (await DbUtils.sequelize.models.User.upsert({...user}))[0] as unknown as User;
     }
 
+    static async createUser(user: User): Promise<User> {
+        return (await DbUtils.sequelize.models.User.create({...user})) as unknown as User;
+    }
+
+    static async login(username: string, password: string): Promise<User> {
+        return (await DbUtils.sequelize.models.User.findOne({
+            where: {
+                username,
+                password,
+                isApproved: true
+            }
+        })) as unknown as User;
+    }
+
     static async getPendingUserApplications(): Promise<User[]> {
         return await DbUtils.sequelize.models.User.findAll({where: {isApproved: false}}) as unknown as User[];
+    }
+
+    static async getUsers(): Promise<User[]> {
+        return await DbUtils.sequelize.models.User.findAll({where: {isApproved: true}}) as unknown as User[];
     }
 
     static async deleteUser(id: number): Promise<number> {
         return await DbUtils.sequelize.models.User.destroy({where: {id}});
     }
 
-    static async deleteRide(id: number): Promise<number> {
+    static async deleteRideById(id: number): Promise<number> {
         return await DbUtils.sequelize.models.Ride.destroy({where: {id}});
+    }
+
+    static async deleteRideByCatId(catId: number): Promise<number> {
+        return await DbUtils.sequelize.models.Ride.destroy({where: {catId}});
+    }
+
+    static async getPendingFosterCareApplications(): Promise<FosterCare[]> {
+        return await DbUtils.sequelize.models.FosterCare.findAll({where: {isApproved: false}}) as unknown as FosterCare[];
     }
 
     static async upsertFosterCare(fosterCare: Partial<FosterCare>): Promise<FosterCare> {
@@ -71,6 +97,10 @@ export class DbUtils {
         return await DbUtils.sequelize.models.FosterCare.destroy({where: {id}});
     }
 
+    static async deleteFosterCareByCatId(catId: number): Promise<number> {
+        return await DbUtils.sequelize.models.FosterCare.destroy({where: {catId}});
+    }
+
     private static async syncDb(): Promise<void> {
         const Cat = DbUtils.sequelize.define('Cat',
             {
@@ -79,13 +109,19 @@ export class DbUtils {
                 age: {type: DataTypes.INTEGER},
                 sex: {type: DataTypes.CHAR},
                 dateOfArrival: {type: DataTypes.DATE},
-                location: {type: DataTypes.STRING},
-                illnesses: {type: DataTypes.JSON},
+                illnesses: {
+                    type: DataTypes.STRING, get() {
+                        return this.getDataValue('illnesses').split(';')
+                    },
+                    set(val: string) {
+                        this.setDataValue('illnesses', val?.length ? JSON.parse(val).join(';') : '');
+                    }
+                },
                 isVaccinated: {type: DataTypes.BOOLEAN},
                 isNeutered: {type: DataTypes.BOOLEAN},
                 isVetted: {type: DataTypes.BOOLEAN},
                 hasWorms: {type: DataTypes.BOOLEAN},
-                isAdopted: {type: DataTypes.BOOLEAN}
+                isAdopted: {type: DataTypes.BOOLEAN, defaultValue: false}
             },
             {underscored: true}
         );
@@ -93,7 +129,7 @@ export class DbUtils {
         const User = DbUtils.sequelize.define('User',
             {
                 id: DEFAULT_ID_OPTIONS,
-                username: {type: DataTypes.STRING, unique: true},
+                username: {type: DataTypes.STRING, unique: 'username'},
                 password: DataTypes.STRING,
                 isAdmin: {type: DataTypes.BOOLEAN, defaultValue: false},
                 isApproved: {type: DataTypes.BOOLEAN, defaultValue: false},
