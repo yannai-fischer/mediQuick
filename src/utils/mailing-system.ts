@@ -1,19 +1,19 @@
-import {Cat, User} from "./models";
-import {MailingUtils} from "./mailing-utils";
-import {DbUtils} from "./db-utils";
-
-export class MailingSystem {
-
-    static async init(): Promise<void> {
-        MailingUtils.init(await DbUtils.getAdminEmails());
-        console.log(`MailingSystem initialised!`);
-    }
-
-    static async sendApprovalEmail(user: User): Promise<boolean> {
-        return await MailingUtils.sendApprovalEmail(user);
-    }
-
-    static async sendFosterCareEmail(user: Partial<User>, cat: Partial<Cat>): Promise<boolean> {
-        return await MailingUtils.sendFosterCareEmail(user, cat);
-    }
-}
+// import {Dog, User} from "./models";
+// import {MailingUtils} from "./mailing-utils";
+// import {DatabaseTools} from "./database-tools";
+//
+// export class MailingSystem {
+//
+//     static async init(): Promise<void> {
+//         MailingUtils.init(await DatabaseTools.getAdminEmails());
+//         console.log(`MailingSystem initialised!`);
+//     }
+//
+//     static async sendApprovalEmail(user: User): Promise<boolean> {
+//         return await MailingUtils.sendApprovalEmail(user);
+//     }
+//
+//     static async sendAdoptionEmail(user: Partial<User>, dog: Partial<Dog>): Promise<boolean> {
+//         return await MailingUtils.sendAdoptionEmail(user, dog);
+//     }
+// }

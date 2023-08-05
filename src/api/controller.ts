@@ -1,5 +1,5 @@
 import {Express, NextFunction, Request, Response} from "express";
-import {Cat, FosterCare, Ride, User} from "../utils/models";
+import {Dog, Adoption, Drive, User} from "../utils/interfaces";
 import {Service} from "./service";
 
 export class Controller {
@@ -17,98 +17,95 @@ export class Controller {
             res.setHeader('Access-Control-Allow-Headers', 'Accept,Accept-Language,Content-Language,Content-Type');
             next();
         });
-        Controller.app.get('/getCats', Controller.getCats);
-        Controller.app.post('/upsertCat', Controller.upsertCat);
-        Controller.app.post('/adoptCat/:id', Controller.adoptCat);
-        Controller.app.get('/getRides', Controller.getRides);
-        Controller.app.post('/upsertRide', Controller.upsertRide);
-        Controller.app.post('/claimRide/:id/:userId', Controller.claimRide);
-        Controller.app.delete('/deleteRide/:id', Controller.deleteRide);
+        Controller.app.get('/getDogs', Controller.getDogs);
+        Controller.app.post('/upsertDog', Controller.upsertDog);
+        Controller.app.post('/adoptDog/:id', Controller.adoptDog);
+        Controller.app.get('/getDrives', Controller.getDrives);
+        Controller.app.post('/upsertDrive', Controller.upsertDrive);
+        Controller.app.post('/claimDrive/:id/:userId', Controller.claimDrive);
+        Controller.app.delete('/deleteDrive/:id', Controller.deleteDrive);
         Controller.app.get('/getUsers', Controller.getUsers);
-        Controller.app.get('/pendingUserApplications', Controller.getPendingUserApplications);
-        Controller.app.post('/createUser', Controller.createUser);
         Controller.app.post('/upsertUser', Controller.upsertUser);
         Controller.app.get('/login/:username/:password', Controller.login);
-        Controller.app.post('/approveUser/:id', Controller.approveUser);
         Controller.app.delete('/deleteUser/:id', Controller.deleteUser);
-        Controller.app.get('/pendingFosterCareApplications', Controller.getPendingFosterCareApplications);
-        Controller.app.post('/upsertFosterCare', Controller.upsertFosterCare);
-        Controller.app.post('/approveFosterCare/:id', Controller.approveFosterCare);
-        Controller.app.delete('/deleteFosterCare/:id', Controller.deleteFosterCare);
+        Controller.app.get('/pendingAdoptionApplications', Controller.getPendingAdoptionApplications);
+        Controller.app.post('/upsertAdoption', Controller.upsertAdoption);
+        Controller.app.post('/approveAdoption/:id', Controller.approveAdoption);
+        Controller.app.delete('/deleteAdoption/:id', Controller.deleteAdoption);
     }
 
-    private static async getCats(req: Request, res: Response): Promise<Response> {
+    private static async getDogs(req: Request, res: Response): Promise<Response> {
         try {
-            console.log(`Got request to get cats`);
-            return res.send(await Service.getCats());
+            console.log(`Got request to get dogs`);
+            return res.send(await Service.getDogs());
         } catch (e) {
-            console.error(`Request to get cats failed. Error: ${e}`);
+            console.error(`Request to get dogs failed. Error: ${e}`);
             return res.send(e);
         }
     }
 
-    private static async upsertCat(req: Request, res: Response): Promise<Response> {
+    private static async upsertDog(req: Request, res: Response): Promise<Response> {
         try {
-            const cat: Cat = req.query as unknown as Cat;
-            console.log(`Got request to upsert cat: ${JSON.stringify(cat)}`);
-            return res.send(await Service.upsertCat(cat));
+            const dog: Dog = req.query as unknown as Dog;
+            console.log(`Got request to upsert dog: ${JSON.stringify(dog)}`);
+            return res.send(await Service.upsertDog(dog));
         } catch (e) {
-            console.error(`Request to upsert cat failed. Error: ${e}`);
+            console.error(`Request to upsert dog failed. Error: ${e}`);
             return res.send(e);
         }
     }
 
-    private static async adoptCat(req: Request, res: Response): Promise<Response> {
+    private static async adoptDog(req: Request, res: Response): Promise<Response> {
         try {
-            const catId: number =  req?.params?.id ? +req.params.id : -1;;
-            console.log(`Got request to adopt cat with id: ${catId}`);
-            return res.send(catId && await Service.adoptCat(catId));
+            const dogId: number =  req?.params?.id ? +req.params.id : -1;
+            console.log(`Got request to adopt dog with id: ${dogId}`);
+            return res.send(dogId && await Service.adoptDog(dogId));
         } catch (e) {
             console.error(`Request to adopt cat failed. Error: ${e}`);
             return res.send(e);
         }
     }
 
-    private static async getRides(req: Request, res: Response): Promise<Response> {
+    private static async getDrives(req: Request, res: Response): Promise<Response> {
         try {
-            console.log(`Got request to get rides`);
-            return res.send(await Service.getRides());
+            console.log(`Got request to get drives`);
+            return res.send(await Service.getDrives());
         } catch (e) {
-            console.error(`Request to get rides failed. Error: ${e}`);
+            console.error(`Request to get drives failed. Error: ${e}`);
             return res.send(e);
         }
     }
 
-    private static async upsertRide(req: Request, res: Response): Promise<Response> {
+    private static async upsertDrive(req: Request, res: Response): Promise<Response> {
         try {
-            const ride: Ride = req.query as unknown as Ride;
-            console.log(`Got request to upsert ride: ${JSON.stringify(ride)}`);
-            return res.send(await Service.upsertRide(ride));
+            const drive: Drive = req.query as unknown as Drive;
+            console.log(`Got request to upsert drive: ${JSON.stringify(drive)}`);
+            return res.send(await Service.upsertDrive(drive));
         } catch (e) {
-            console.error(`Request to upsert ride failed. Error: ${e}`);
+            console.error(`Request to upsert drive failed. Error: ${e}`);
             return res.send(e);
         }
     }
 
-    private static async claimRide(req: Request, res: Response): Promise<Response> {
+    private static async claimDrive(req: Request, res: Response): Promise<Response> {
         try {
             const id: number = req?.params?.id ? +req?.params?.id : -1;
-            const userId: number =  req?.params?.userId ? +req.params.userId : -1;;
-            console.log(`Got request to claim ride by user with id: ${JSON.stringify(id)}`);
-            return res.send(await Service.claimRide(id, userId));
+            const userId: number =  req?.params?.userId ? +req.params.userId : -1;
+            console.log(`Got request to claim drive by user with id: ${JSON.stringify(id)}`);
+            return res.send(await Service.claimDrive(id, userId));
         } catch (e) {
-            console.error(`Request to claim ride failed. Error: ${e}`);
+            console.error(`Request to claim drive failed. Error: ${e}`);
             return res.send(e);
         }
     }
 
-    private static async deleteRide(req: Request, res: Response): Promise<Response> {
+    private static async deleteDrive(req: Request, res: Response): Promise<Response> {
         try {
             const id: number = +req.params.id;
-            console.log(`Got request to delete ride with id: ${id}`);
-            return res.json({success: await Service.deleteRide(id)});
+            console.log(`Got request to delete drive with id: ${id}`);
+            return res.json({success: await Service.deleteDrive(id)});
         } catch (e) {
-            console.error(`Request to delete ride failed. Error: ${e}`);
+            console.error(`Request to delete drive failed. Error: ${e}`);
             return res.send(e);
         }
     }
@@ -123,16 +120,6 @@ export class Controller {
         }
     }
 
-    private static async getPendingUserApplications(req: Request, res: Response): Promise<Response> {
-        try {
-            console.log(`Got request to get pending user applications`);
-            return res.send(await Service.getPendingUserApplications());
-        } catch (e) {
-            console.error(`Request to get pending user applications failed. Error: ${e}`);
-            return res.send(e);
-        }
-    }
-
     private static async upsertUser(req: Request, res: Response): Promise<Response> {
         try {
             const user: User = req.query as unknown as User;
@@ -140,28 +127,6 @@ export class Controller {
             return res.send(await Service.upsertUser(user));
         } catch (e) {
             console.error(`Request to upsert user failed. Error: ${e}`);
-            return res.send(e);
-        }
-    }
-
-    private static async createUser(req: Request, res: Response): Promise<Response> {
-        try {
-            const user: User = req.query as unknown as User;
-            console.log(`Got request to create user: ${JSON.stringify(user)}`);
-            return res.send(await Service.createUser(user));
-        } catch (e) {
-            console.error(`Request to create user failed. Error: ${e}`);
-            return res.send(e);
-        }
-    }
-
-    private static async approveUser(req: Request, res: Response): Promise<Response> {
-        try {
-            const id: number = req?.params?.id ? +req.params.id : -1;
-            console.log(`Got request to approve user with id: ${JSON.stringify(id)}`);
-            return res.send(await Service.approveUser(id));
-        } catch (e) {
-            console.error(`Request to approve user failed. Error: ${e}`);
             return res.send(e);
         }
     }
@@ -189,50 +154,49 @@ export class Controller {
         }
     }
 
-    private static async getPendingFosterCareApplications(req: Request, res: Response): Promise<Response> {
+    private static async getPendingAdoptionApplications(req: Request, res: Response): Promise<Response> {
         try {
-            console.log(`Got request to get pending foster care applications`);
-            return res.send(await Service.getPendingFosterCareApplications());
+            console.log(`Got request to get pending adoption applications`);
+            return res.send(await Service.getPendingAdoptionApplications());
         } catch (e) {
-            console.error(`Request to get pending foster care applications failed. Error: ${e}`);
+            console.error(`Request to get pending adoption applications failed. Error: ${e}`);
             return res.send(e);
         }
     }
 
-    private static async upsertFosterCare(req: Request, res: Response): Promise<Response> {
+    private static async upsertAdoption(req: Request, res: Response): Promise<Response> {
         try {
-            const fosterCare: FosterCare = {
-                cat: {id: req.query.catId},
+            const adoption: Adoption = {
+                dog: {id: req.query.dogId},
                 user: {id: req.query.userId},
-                finishDate: req.query.finishDate,
-                startDate: req.query.startDate
-            } as unknown as FosterCare;
-            console.log(`Got request to upsert foster care: ${JSON.stringify(fosterCare)}`);
-            return res.send(await Service.upsertFosterCare(fosterCare));
+                adoptionDate: req.query.adoptionDate,
+            } as unknown as Adoption;
+            console.log(`Got request to upsert adoption: ${JSON.stringify(adoption)}`);
+            return res.send(await Service.upsertAdoption(adoption));
         } catch (e) {
-            console.error(`Request to upsert foster care failed. Error: ${e}`);
+            console.error(`Request to upsert adoption failed. Error: ${e}`);
             return res.send(e);
         }
     }
 
-    private static async approveFosterCare(req: Request, res: Response): Promise<Response> {
+    private static async approveAdoption(req: Request, res: Response): Promise<Response> {
         try {
-            const id: number =  req?.params?.id ? +req.params.id : -1;;
-            console.log(`Got request to approve foster care with id: ${JSON.stringify(id)}`);
-            return res.send(await Service.approveFosterCare(id));
+            const id: number =  req?.params?.id ? +req.params.id : -1;
+            console.log(`Got request to approve adoption with id: ${JSON.stringify(id)}`);
+            return res.send(await Service.adoptDog(id));
         } catch (e) {
-            console.error(`Request to approve foster care failed. Error: ${e}`);
+            console.error(`Request to approve adoption failed. Error: ${e}`);
             return res.send(e);
         }
     }
 
-    private static async deleteFosterCare(req: Request, res: Response): Promise<Response> {
+    private static async deleteAdoption(req: Request, res: Response): Promise<Response> {
         try {
             const id: number = +req.params.id;
-            console.log(`Got request to delete foster care with id: ${id}`);
-            return res.json({success: await Service.deleteFosterCare(id)});
+            console.log(`Got request to delete adoption with id: ${id}`);
+            return res.json({success: await Service.deleteAdoption(id)});
         } catch (e) {
-            console.error(`Request to delete foster care failed. Error: ${e}`);
+            console.error(`Request to delete adoption failed. Error: ${e}`);
             return res.send(e);
         }
     }

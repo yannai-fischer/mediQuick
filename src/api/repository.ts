@@ -1,77 +1,78 @@
-import {Cat, FosterCare, Ride, User} from "../utils/models";
-import {DbUtils} from "../utils/db-utils";
+import {Dog, Adoption, Drive, User} from "../utils/interfaces";
+import {DatabaseTools} from "../utils/database-tools";
 
 export class Repository {
 
-    static async getRides(): Promise<Ride[]> {
-        return await DbUtils.getRides();
+    static async getDrives(): Promise<Drive[]> {
+        return await DatabaseTools.getDrives();
     }
 
-    static async upsertRide(ride:Partial<Ride>): Promise<Ride> {
-        return await DbUtils.upsertRide(ride);
+    static async upsertDrive(drive:Partial<Drive>): Promise<Drive> {
+        return await DatabaseTools.upsertDrive(drive);
     }
 
-    static async deleteRide(id: number): Promise<number> {
-        return await DbUtils.deleteRideById(id);
+    static async deleteDrive(id: number): Promise<number> {
+        return await DatabaseTools.deleteDriveById(id);
     }
 
-    static async getCats(): Promise<Cat[]> {
-        return await DbUtils.getCats();
+    static async getDogs(): Promise<Dog[]> {
+        return await DatabaseTools.getDogs();
     }
 
-    static async getCatById(id:number): Promise<Cat> {
-        return await DbUtils.getCatById(id);
+    static async getDogById(id:number): Promise<Dog> {
+        return await DatabaseTools.getDogById(id);
     }
 
-    static async upsertCat(cat: Partial<Cat>): Promise<Cat> {
-        return await DbUtils.upsertCat(cat);
+    static async upsertDog(dog: Partial<Dog>): Promise<Dog> {
+        return await DatabaseTools.upsertDog(dog);
     }
 
     static async getUserById(id:number): Promise<User> {
-        return await DbUtils.getUserById(id);
+        return await DatabaseTools.getUserById(id);
     }
 
     static async login(username:string, password:string): Promise<User> {
-        return await DbUtils.login(username, password);
+        return await DatabaseTools.login(username, password);
     }
 
     static async getUsers(): Promise<User[]> {
-        return await DbUtils.getUsers();
+        return await DatabaseTools.getUsers();
     }
 
-    static async getPendingUserApplications(): Promise<User[]> {
-        return await DbUtils.getPendingUserApplications();
-    }
 
-    static async getPendingFosterCareApplications(): Promise<FosterCare[]> {
-        return await DbUtils.getPendingFosterCareApplications();
+    static async getPendingAdoptionApplications(): Promise<Adoption[]> {
+        return await DatabaseTools.getPendingAdoptionApplications();
     }
 
     static async upsertUser(user: Partial<User>): Promise<User> {
-        return await DbUtils.upsertUser(user);
+        return await DatabaseTools.upsertUser(user);
     }
 
     static async createUser(user: User): Promise<User> {
-        return await DbUtils.createUser(user);
+        return await DatabaseTools.createUser(user);
     }
 
     static async deleteUser(id: number): Promise<number> {
-        return await DbUtils.deleteUser(id);
+        return await DatabaseTools.deleteUser(id);
     }
 
-    static async upsertFosterCare(fosterCare: Partial<FosterCare>): Promise<FosterCare> {
-        return await DbUtils.upsertFosterCare(fosterCare);
+    static async upsertAdoption(adoption: Partial<Adoption>): Promise<Adoption> {
+        return await DatabaseTools.upsertAdoption(adoption);
     }
 
-    static async deleteFosterCareById(id: number): Promise<number> {
-        return await DbUtils.deleteFosterCare(id);
+    static async deleteAdoptionById(id: number): Promise<number> {
+        return await DatabaseTools.deleteAdoption(id);
     }
 
-    static async deleteFosterCareByCatId(catId: number): Promise<number> {
-        return await DbUtils.deleteFosterCareByCatId(catId);
+    static async deleteAdoptionByDogId(dogId: number): Promise<number> {
+        return await DatabaseTools.deleteAdoptionByDogId(dogId);
     }
 
-    static async deleteRideByCatId(catId: number): Promise<number> {
-        return await DbUtils.deleteRideByCatId(catId);
+    static async deleteDriveByDogId(dogId: number): Promise<number> {
+        return await DatabaseTools.deleteDriveByDogId(dogId);
+    }
+    
+    static async deleteDogById(dogId: number): Promise<number> {
+        return await DatabaseTools.deleteDogById(dogId);
     }
 }
