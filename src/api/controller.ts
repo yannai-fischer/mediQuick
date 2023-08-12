@@ -28,7 +28,6 @@ export class Controller {
         Controller.app.get('/getUsers', Controller.getUsers);
         Controller.app.post('/upsertUser', Controller.upsertUser);
         Controller.app.get('/login/:username/:password', Controller.login);
-        Controller.app.delete('/deleteUser/:id', Controller.deleteUser);
         Controller.app.get('/pendingAdoptionApplications', Controller.getPendingAdoptionApplications);
         Controller.app.post('/upsertAdoption', Controller.upsertAdoption);
         Controller.app.post('/approveAdoption/:id', Controller.approveAdoption);
@@ -151,17 +150,6 @@ export class Controller {
             return res.send(await Service.login(username, password));
         } catch (e) {
             console.error(`Request to login user failed. Error: ${e}`);
-            return res.send(e);
-        }
-    }
-
-    private static async deleteUser(req: Request, res: Response): Promise<Response> {
-        try {
-            const id: number = +req.params.id;
-            console.log(`Got request to delete user with id: ${id}`);
-            return res.json({success: await Service.deleteUser(id)});
-        } catch (e) {
-            console.error(`Request to delete user failed. Error: ${e}`);
             return res.send(e);
         }
     }

@@ -51,31 +51,12 @@ export class DatabaseTools {
         return await DatabaseTools.sequelize.models.Dog.findAll({where: {lastVaccination: {[Op.lte]: date}}}) as unknown as Dog[];
     }
 
-    static async getDogById(id: number): Promise<Dog> {
-        return await DatabaseTools.sequelize.models.Dog.findOne({where: {id}}) as unknown as Dog;
-    }
-
     static async upsertDog(dog: Partial<Dog>): Promise<Dog> {
         return (await DatabaseTools.sequelize.models.Dog.upsert({...dog}))[0] as unknown as Dog;
     }
 
-    static async getUserById(id: number): Promise<User> {
-        return await DatabaseTools.sequelize.models.User.findOne({where: {id}}) as unknown as User;
-    }
-
-    static async getAdminEmails(): Promise<string[]> {
-        return (await DatabaseTools.sequelize.models.User.findAll({
-            attributes: ['email'],
-            where: {isAdmin: true}
-        })).map(user => user.dataValues.email);
-    }
-
     static async upsertUser(user: Partial<User>): Promise<User> {
         return (await DatabaseTools.sequelize.models.User.upsert({...user}))[0] as unknown as User;
-    }
-
-    static async createUser(user: User): Promise<User> {
-        return (await DatabaseTools.sequelize.models.User.create({...user})) as unknown as User;
     }
 
     static async login(username: string, password: string): Promise<User> {
@@ -89,10 +70,6 @@ export class DatabaseTools {
 
     static async getUsers(): Promise<User[]> {
         return await DatabaseTools.sequelize.models.User.findAll() as unknown as User[];
-    }
-
-    static async deleteUser(id: number): Promise<number> {
-        return await DatabaseTools.sequelize.models.User.destroy({where: {id}});
     }
 
     static async deleteDriveById(id: number): Promise<number> {

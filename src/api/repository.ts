@@ -1,4 +1,4 @@
-import {Dog, Adoption, Drive, User} from "../utils/interfaces";
+import {Adoption, Dog, Drive, User} from "../utils/interfaces";
 import {DatabaseTools} from "../utils/database-tools";
 
 export class Repository {
@@ -19,20 +19,8 @@ export class Repository {
         return await DatabaseTools.getDogs(options);
     }
 
-    static async getDogsToVaccinate(date:Date): Promise<Dog[]> {
-        return await DatabaseTools.getDogsToVaccinate(date);
-    }
-
-    static async getDogById(id:number): Promise<Dog> {
-        return await DatabaseTools.getDogById(id);
-    }
-
     static async upsertDog(dog: Partial<Dog>): Promise<Dog> {
         return await DatabaseTools.upsertDog(dog);
-    }
-
-    static async getUserById(id:number): Promise<User> {
-        return await DatabaseTools.getUserById(id);
     }
 
     static async login(username:string, password:string): Promise<User> {
@@ -43,21 +31,12 @@ export class Repository {
         return await DatabaseTools.getUsers();
     }
 
-
     static async getPendingAdoptionApplications(): Promise<Adoption[]> {
         return await DatabaseTools.getPendingAdoptionApplications();
     }
 
     static async upsertUser(user: Partial<User>): Promise<User> {
         return await DatabaseTools.upsertUser(user);
-    }
-
-    static async createUser(user: User): Promise<User> {
-        return await DatabaseTools.createUser(user);
-    }
-
-    static async deleteUser(id: number): Promise<number> {
-        return await DatabaseTools.deleteUser(id);
     }
 
     static async upsertAdoption(adoption: Partial<Adoption>): Promise<Adoption> {

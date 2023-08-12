@@ -45,24 +45,12 @@ export class Service {
         return await Repository.upsertUser(user);
     }
 
-    //TODO:Remove
-    // static async createUser(user: User): Promise<User> {
-    //     const userToReturn: User = await Repository.createUser(user);
-    //     userToReturn && await MailingSystem.sendApprovalEmail(user);
-    //     return userToReturn;
-    // }
-
     static async login(username: string, password: string): Promise<User> {
         return await Repository.login(username, password);
     }
 
-    static async deleteUser(id: number): Promise<number> {
-        return await Repository.deleteUser(id);
-    }
-
     static async upsertAdoption(adoption: Adoption): Promise<boolean> {
-        return !!await Repository.upsertAdoption(adoption)
-            // && MailingSystem.sendAdoptionEmail(await Repository.getUserById(adoption.user.id ?? -1), await Repository.getDogById(adoption.dog.id ?? -1));
+        return !!await Repository.upsertAdoption(adoption);
     }
 
     static async getPendingAdoptionApplications(): Promise<Adoption[]> {
