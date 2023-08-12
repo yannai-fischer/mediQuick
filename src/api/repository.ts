@@ -15,8 +15,12 @@ export class Repository {
         return await DatabaseTools.deleteDriveById(id);
     }
 
-    static async getDogs(): Promise<Dog[]> {
-        return await DatabaseTools.getDogs();
+    static async getDogs(options?: Partial<Dog>): Promise<Dog[]> {
+        return await DatabaseTools.getDogs(options);
+    }
+
+    static async getDogsToVaccinate(date:Date): Promise<Dog[]> {
+        return await DatabaseTools.getDogsToVaccinate(date);
     }
 
     static async getDogById(id:number): Promise<Dog> {

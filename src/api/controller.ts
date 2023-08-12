@@ -17,7 +17,8 @@ export class Controller {
             res.setHeader('Access-Control-Allow-Headers', 'Accept,Accept-Language,Content-Language,Content-Type');
             next();
         });
-        Controller.app.get('/getDogs', Controller.getDogs);
+        Controller.app.post('/getDogs', Controller.getDogs);
+        Controller.app.get('/getDogsToVaccinate', Controller.getDogsToVaccinate);
         Controller.app.post('/upsertDog', Controller.upsertDog);
         Controller.app.post('/adoptDog/:id', Controller.adoptDog);
         Controller.app.get('/getDrives', Controller.getDrives);
@@ -36,10 +37,21 @@ export class Controller {
 
     private static async getDogs(req: Request, res: Response): Promise<Response> {
         try {
+            const options: Partial<Dog> = req?.query as unknown as Dog;
             console.log(`Got request to get dogs`);
-            return res.send(await Service.getDogs());
+            return res.send(await Service.getDogs(options));
         } catch (e) {
             console.error(`Request to get dogs failed. Error: ${e}`);
+            return res.send(e);
+        }
+    }
+
+    private static async getDogsToVaccinate(req: Request, res: Response): Promise<Response> {
+        try {
+            console.log(`Got request to get dogs to vaccinate`);
+            return res.send(await Service.getDogsToVaccinate());
+        } catch (e) {
+            console.error(`Request to get dogs to vaccinate failed. Error: ${e}`);
             return res.send(e);
         }
     }

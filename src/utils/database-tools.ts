@@ -2,7 +2,12 @@ import {DataTypes, Op, Sequelize} from 'sequelize';
 import {Dog, Adoption, Drive, User} from "./interfaces";
 import * as mysql from 'mysql2/promise';
 
-export const DEFAULT_ID_OPTIONS: { allowNull: boolean, autoIncrement: boolean, primaryKey: boolean, type: DataTypes.IntegerDataTypeConstructor }
+export const DEFAULT_ID_OPTIONS: {
+    allowNull: boolean,
+    autoIncrement: boolean,
+    primaryKey: boolean,
+    type: DataTypes.IntegerDataTypeConstructor
+}
     = {
     allowNull: false,
     autoIncrement: true,
@@ -38,8 +43,12 @@ export class DatabaseTools {
         return (await DatabaseTools.sequelize.models.Drive.upsert({...drive}))[0] as unknown as Drive;
     }
 
-    static async getDogs(): Promise<Dog[]> {
-        return await DatabaseTools.sequelize.models.Dog.findAll() as unknown as Dog[];
+    static async getDogs(options?: Partial<Dog>): Promise<Dog[]> {
+        return await DatabaseTools.sequelize.models.Dog.findAll({where: options}) as unknown as Dog[];
+    }
+
+    static async getDogsToVaccinate(date:Date): Promise<Dog[]> {
+        return await DatabaseTools.sequelize.models.Dog.findAll({where: {lastVaccination: {[Op.lte]: date}}}) as unknown as Dog[];
     }
 
     static async getDogById(id: number): Promise<Dog> {
@@ -111,6 +120,7 @@ export class DatabaseTools {
     static async deleteAdoptionByDogId(dogId: number): Promise<number> {
         return await DatabaseTools.sequelize.models.Adoptcion.destroy({where: {dogId}});
     }
+
     static async deleteDogById(id: number): Promise<number> {
         return await DatabaseTools.sequelize.models.Dog.destroy({where: {id}});
     }
