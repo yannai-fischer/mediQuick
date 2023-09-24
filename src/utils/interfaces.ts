@@ -26,7 +26,7 @@ export interface Drive {
     id?: number;
     dogId: number;
     timeOfDeparture: Date;
-    startingPoint: string;
+    source: string;
     destination: string;
     userId:number;
 }

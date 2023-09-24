@@ -1,5 +1,5 @@
 import {DataTypes, Op, Sequelize} from 'sequelize';
-import {Dog, Adoption, Drive, User} from "./interfaces";
+import {Adoption, Dog, Drive, User} from "./interfaces";
 import * as mysql from 'mysql2/promise';
 
 export const DEFAULT_ID_OPTIONS: {
@@ -47,7 +47,7 @@ export class DatabaseTools {
         return await DatabaseTools.sequelize.models.Dog.findAll({where: options}) as unknown as Dog[];
     }
 
-    static async getDogsToVaccinate(date:Date): Promise<Dog[]> {
+    static async getDogsToVaccinate(date: Date): Promise<Dog[]> {
         return await DatabaseTools.sequelize.models.Dog.findAll({where: {lastVaccination: {[Op.lte]: date}}}) as unknown as Dog[];
     }
 
@@ -70,6 +70,10 @@ export class DatabaseTools {
 
     static async getUsers(): Promise<User[]> {
         return await DatabaseTools.sequelize.models.User.findAll() as unknown as User[];
+    }
+
+    static async getUserById(id: number): Promise<User> {
+        return await DatabaseTools.sequelize.models.User.findOne({where: {id}}) as unknown as User;
     }
 
     static async deleteDriveById(id: number): Promise<number> {
@@ -95,7 +99,7 @@ export class DatabaseTools {
     }
 
     static async deleteAdoptionByDogId(dogId: number): Promise<number> {
-        return await DatabaseTools.sequelize.models.Adoptcion.destroy({where: {dogId}});
+        return await DatabaseTools.sequelize.models.Adoption.destroy({where: {dogId}});
     }
 
     static async deleteDogById(id: number): Promise<number> {
@@ -158,7 +162,7 @@ export class DatabaseTools {
                 },
                 id: DEFAULT_ID_OPTIONS,
                 timeOfDeparture: DataTypes.DATE,
-                startingPoint: DataTypes.STRING,
+                source: DataTypes.STRING,
                 destination: DataTypes.STRING,
             },
             {underscored: true});

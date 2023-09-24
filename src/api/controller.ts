@@ -26,11 +26,11 @@ export class Controller {
         Controller.app.post('/claimDrive/:id/:userId', Controller.claimDrive);
         Controller.app.delete('/deleteDrive/:id', Controller.deleteDrive);
         Controller.app.get('/getUsers', Controller.getUsers);
+        Controller.app.get('/getUserById/:id', Controller.getUserById);
         Controller.app.post('/upsertUser', Controller.upsertUser);
         Controller.app.get('/login/:username/:password', Controller.login);
         Controller.app.get('/pendingAdoptionApplications', Controller.getPendingAdoptionApplications);
         Controller.app.post('/upsertAdoption', Controller.upsertAdoption);
-        Controller.app.post('/approveAdoption/:id', Controller.approveAdoption);
         Controller.app.delete('/deleteAdoption/:id', Controller.deleteAdoption);
     }
 
@@ -72,7 +72,7 @@ export class Controller {
             console.log(`Got request to adopt dog with id: ${dogId}`);
             return res.send(dogId && await Service.adoptDog(dogId));
         } catch (e) {
-            console.error(`Request to adopt cat failed. Error: ${e}`);
+            console.error(`Request to adopt dog failed. Error: ${e}`);
             return res.send(e);
         }
     }
@@ -131,6 +131,17 @@ export class Controller {
         }
     }
 
+    private static async getUserById(req: Request, res: Response): Promise<Response> {
+        try {
+            const id: number =  req?.params?.id ? +req.params.id : -1;
+            console.log(`Got request to get user by id: ${id}`);
+            return res.send(await Service.getUserById(id));
+        } catch (e) {
+            console.error(`Request to get user by id failed. Error: ${e}`);
+            return res.send(e);
+        }
+    }
+
     private static async upsertUser(req: Request, res: Response): Promise<Response> {
         try {
             const user: User = req.query as unknown as User;
@@ -175,17 +186,6 @@ export class Controller {
             return res.send(await Service.upsertAdoption(adoption));
         } catch (e) {
             console.error(`Request to upsert adoption failed. Error: ${e}`);
-            return res.send(e);
-        }
-    }
-
-    private static async approveAdoption(req: Request, res: Response): Promise<Response> {
-        try {
-            const id: number =  req?.params?.id ? +req.params.id : -1;
-            console.log(`Got request to approve adoption with id: ${JSON.stringify(id)}`);
-            return res.send(await Service.adoptDog(id));
-        } catch (e) {
-            console.error(`Request to approve adoption failed. Error: ${e}`);
             return res.send(e);
         }
     }

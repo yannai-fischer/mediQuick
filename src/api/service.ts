@@ -2,7 +2,7 @@ import {Adoption, Dog, Drive, User} from "../utils/interfaces";
 import {Repository} from "./repository";
 import {DatabaseTools} from "../utils/database-tools";
 
-const VACCINATION_CONSTANT:number = 6;
+const VACCINATION_CONSTANT: number = 6;
 
 export class Service {
 
@@ -23,8 +23,8 @@ export class Service {
     }
 
     static async getDogsToVaccinate(): Promise<Dog[]> {
-        const currentDate:Date = new Date();
-        const vaccinationDate:Date = new Date(currentDate);
+        const currentDate: Date = new Date();
+        const vaccinationDate: Date = new Date(currentDate);
         vaccinationDate.setMonth(currentDate.getMonth() - VACCINATION_CONSTANT);
         return await DatabaseTools.getDogsToVaccinate(vaccinationDate);
     }
@@ -39,6 +39,10 @@ export class Service {
 
     static async getUsers(): Promise<User[]> {
         return await Repository.getUsers();
+    }
+
+    static async getUserById(id: number): Promise<User> {
+        return await Repository.getUserById(id);
     }
 
     static async upsertUser(user: User): Promise<User> {

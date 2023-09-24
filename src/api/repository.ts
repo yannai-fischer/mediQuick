@@ -7,7 +7,7 @@ export class Repository {
         return await DatabaseTools.getDrives();
     }
 
-    static async upsertDrive(drive:Partial<Drive>): Promise<Drive> {
+    static async upsertDrive(drive: Partial<Drive>): Promise<Drive> {
         return await DatabaseTools.upsertDrive(drive);
     }
 
@@ -23,12 +23,16 @@ export class Repository {
         return await DatabaseTools.upsertDog(dog);
     }
 
-    static async login(username:string, password:string): Promise<User> {
+    static async login(username: string, password: string): Promise<User> {
         return await DatabaseTools.login(username, password);
     }
 
     static async getUsers(): Promise<User[]> {
         return await DatabaseTools.getUsers();
+    }
+
+    static async getUserById(id: number): Promise<User> {
+        return await DatabaseTools.getUserById(id);
     }
 
     static async getPendingAdoptionApplications(): Promise<Adoption[]> {
@@ -54,7 +58,7 @@ export class Repository {
     static async deleteDriveByDogId(dogId: number): Promise<number> {
         return await DatabaseTools.deleteDriveByDogId(dogId);
     }
-    
+
     static async deleteDogById(dogId: number): Promise<number> {
         return await DatabaseTools.deleteDogById(dogId);
     }
