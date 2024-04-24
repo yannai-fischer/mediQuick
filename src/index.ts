@@ -1,19 +1,17 @@
 // @ts-ignore
-import express, {Express} from 'express';
-import {Controller} from "./api/controller";
-import {DatabaseTools} from "./utils/database-tools";
-
-const PORT:number = 3000;
+import express from 'express';
+import {Router} from "./server/router";
+import {DataAccess} from "./server/data-access";
+import {DatabasePoller} from "./server/database-poller";
 
 class Application {
-    static async run() {
-        const app:Express = express();
-        await app.listen(PORT);
-        console.log(`App listening on port ${PORT}`);
-        Controller.init(app);
-        await DatabaseTools.init();
-        console.log(`Dog system up and running!`);
+    static async start() {
+        express().listen(4000);
+        Router.initialize();
+        await DataAccess.initialize();
+        DatabasePoller.initialize();
+        console.log(`MediQuick up!`);
     }
 }
 
-Application.run();
+Application.start();
