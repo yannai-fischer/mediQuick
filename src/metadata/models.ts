@@ -16,6 +16,7 @@ export interface Patient {
     severity: string;
     injuryTime: Date;
     injuryDescription: string;
+    specialityNeeded: string;
 }
 
 export interface Room {

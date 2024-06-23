@@ -1,13 +1,14 @@
 // @ts-ignore
-import express from 'express';
-import {Router} from "./server/router";
-import {DataAccess} from "./server/data-access";
+import express, {Express} from 'express';
+import {Router} from "./server/rest-api/router";
+import {DataAccess} from "./server/rest-api/data-access";
 import {DatabasePoller} from "./server/database-poller";
 
 class Application {
     static async start() {
-        express().listen(4000);
-        Router.initialize();
+        const server: Express = express();
+        server.listen(4000);
+        Router.initialize(server);
         await DataAccess.initialize();
         DatabasePoller.initialize();
         console.log(`MediQuick up!`);
